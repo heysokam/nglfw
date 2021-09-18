@@ -1102,3 +1102,16 @@ GLFWAPI void glfwPostEmptyEvent(void)
     _GLFW_REQUIRE_INIT();
     _glfwPlatformPostEmptyEvent();
 }
+
+GLFWAPI void glfwSetImePos(GLFWwindow* handle, int* xpos, int* ypos)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT();
+
+    if (window->monitor)
+        return;
+
+    _glfwPlatformSetImePos(window, xpos, ypos);
+}

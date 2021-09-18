@@ -689,6 +689,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         markedText = [[NSMutableAttributedString alloc] initWithAttributedString:string];
     else
         markedText = [[NSMutableAttributedString alloc] initWithString:string];
+
+    NSString *str = [markedText string];
+    printf("[%s]\n", [str UTF8String]);
 }
 
 - (void)unmarkText
@@ -715,8 +718,16 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 - (NSRect)firstRectForCharacterRange:(NSRange)range
                          actualRange:(NSRangePointer)actualRange
 {
-    const NSRect frame = [window->ns.view frame];
-    return NSMakeRect(frame.origin.x, frame.origin.y, 0.0, 0.0);
+    const NSRect contentRect =
+        [window->ns.object contentRectForFrameRect:[window->ns.object frame]];
+
+    return NSMakeRect(
+        contentRect.origin.x + window->ns.imeX,
+        contentRect.origin.y + contentRect.size.height - 1 - window->ns.imeY,
+        10.0,
+        0.0
+    );
+
 }
 
 - (void)insertText:(id)string replacementRange:(NSRange)replacementRange
@@ -1845,3 +1856,12 @@ GLFWAPI id glfwGetCocoaWindow(GLFWwindow* handle)
     return window->ns.object;
 }
 
+void _glfwPlatformSetImePos(_GLFWwindow* window, int x, int y)
+{
+    @autoreleasepool {
+
+    window->ns.imeX = x;
+    window->ns.imeY = y;
+
+    } // autoreleasepool
+}

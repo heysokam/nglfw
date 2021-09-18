@@ -528,3 +528,6 @@ proc createWindowSurface*(instance: VkInstance, window: Window, allocator: ptr V
 # Native functions
 when defined(windows):
   proc getWin32Window*(window: Window): cint {.cdecl, importc: "glfwGetWin32Window".}
+
+# My Extra functions:
+proc setImePos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetImePos".}

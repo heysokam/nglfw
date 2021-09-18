@@ -134,6 +134,9 @@ typedef struct _GLFWwindowNS
     // This is kept to counteract Cocoa doing the same internally
     double          cursorWarpDeltaX, cursorWarpDeltaY;
 
+    // Desired location of the IME Box.
+    int             imeX, imeY;
+
 } _GLFWwindowNS;
 
 // Cocoa-specific global data
@@ -208,4 +211,3 @@ void _glfwRestoreVideoModeNS(_GLFWmonitor* monitor);
 float _glfwTransformYNS(float y);
 
 void* _glfwLoadLocalVulkanLoaderNS(void);
-
