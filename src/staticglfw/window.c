@@ -1115,3 +1115,16 @@ GLFWAPI void glfwSetImePos(GLFWwindow* handle, int* xpos, int* ypos)
 
     _glfwPlatformSetImePos(window, xpos, ypos);
 }
+
+GLFWAPI void glfwGetIme(GLFWwindow* handle, int* location, char* string)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT();
+
+    if (window->monitor)
+        return;
+
+    _glfwPlatformGetIme(window, location, string);
+}

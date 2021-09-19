@@ -136,6 +136,8 @@ typedef struct _GLFWwindowNS
 
     // Desired location of the IME Box.
     int             imeX, imeY;
+    char            imeEditString[256];
+    int             imeEditLocation;
 
 } _GLFWwindowNS;
 

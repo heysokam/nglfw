@@ -691,7 +691,17 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         markedText = [[NSMutableAttributedString alloc] initWithString:string];
 
     NSString *str = [markedText string];
-    printf("[%s]\n", [str UTF8String]);
+    printf("[%s] %i %i : %i %i\n",
+        [str UTF8String],
+        selectedRange.location,
+        selectedRange.length,
+        replacementRange.location,
+        replacementRange.length
+    );
+
+    window->ns.imeEditLocation = selectedRange.location;
+    char* strWillGc = [str UTF8String];
+    memcpy(window->ns.imeEditString, strWillGc, 256);
 }
 
 - (void)unmarkText
@@ -721,6 +731,7 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     const NSRect contentRect =
         [window->ns.object contentRectForFrameRect:[window->ns.object frame]];
 
+    // Returns window + IME position.
     return NSMakeRect(
         contentRect.origin.x + window->ns.imeX,
         contentRect.origin.y + contentRect.size.height - 1 - window->ns.imeY,
@@ -751,6 +762,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
         _glfwInputChar(window, codepoint, mods, plain);
     }
+
+    window->ns.imeEditLocation = 0;
+    window->ns.imeEditString[0] = '\0';
 }
 
 - (void)doCommandBySelector:(SEL)selector
@@ -1862,6 +1876,17 @@ void _glfwPlatformSetImePos(_GLFWwindow* window, int x, int y)
 
     window->ns.imeX = x;
     window->ns.imeY = y;
+
+    } // autoreleasepool
+}
+
+void _glfwPlatformGetIme(_GLFWwindow* window, int* location, char* string)
+{
+    @autoreleasepool {
+
+    location[0] = window->ns.imeEditLocation;
+
+    memcpy(string, window->ns.imeEditString, 256);
 
     } // autoreleasepool
 }
