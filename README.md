@@ -2,6 +2,12 @@
 
 `nimble install staticglfw`
 
+![Github Actions](https://github.com/treeform/staticglfw/workflows/Github%20Actions/badge.svg)
+
+[API reference](https://nimdocs.com/treeform/staticglfw)
+
+## About
+
 This library is always statically linked so only the functionality you use gets included in the binary. There is also no need for glfw.dll or libglfw3.dylib to be included.
 
 ## Example
