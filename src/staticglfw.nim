@@ -524,3 +524,7 @@ proc vulkanSupported*(): cint {.cdecl, importc: "glfwVulkanSupported".}
 proc getInstanceProcAddress*(instance: VkInstance, procname: cstring): VKProc {.cdecl, importc: "glfwGetInstanceProcAddress".}
 proc getPhysicalDevicePresentationSupport*(instance: VkInstance, device: VkPhysicalDevice, queuefamily: cuint): cint {.cdecl, importc: "glfwGetPhysicalDevicePresentationSupport".}
 proc createWindowSurface*(instance: VkInstance, window: Window, allocator: ptr VkAllocationCallbacks, surface: ptr VkSurfaceKHR): VkResult {.cdecl, importc: "glfwCreateWindowSurface".}
+
+# Native functions
+when defined(windows):
+  proc getWin32Window*(window: Window): cint {.cdecl, importc: "glfwGetWin32Window".}
