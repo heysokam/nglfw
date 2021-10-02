@@ -3,13 +3,14 @@ when defined(emscripten):
 else:
   when defined(windows):
     when defined(gcc):
-      {.passC: "-D_GLFW_WIN32", passL: "-lopengl32 -lgdi32".}
+      {.passC: "-D_GLFW_WIN32", passL: "-lopengl32 -lgdi32 -limm32".}
     when defined(vcc):
       {.passC: "-D_GLFW_WIN32".}
       {.link: "kernel32.lib".}
       {.link: "gdi32.lib".}
       {.link: "shell32.lib".}
       {.link: "user32.lib".}
+      {.link: "imm32.lib".}
     {.
       compile: "staticglfw/win32_init.c",
       compile: "staticglfw/win32_joystick.c",

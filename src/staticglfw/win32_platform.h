@@ -317,6 +317,11 @@ typedef struct _GLFWwindowWin32
     // The last received cursor position, regardless of source
     int                 lastCursorPosX, lastCursorPosY;
 
+    // Desired location of the IME Box.
+    int             imeX, imeY;
+    char            imeEditString[256];
+    int             imeEditLocation;
+
 } _GLFWwindowWin32;
 
 // Win32-specific global data
@@ -453,4 +458,3 @@ void _glfwPollMonitorsWin32(void);
 void _glfwSetVideoModeWin32(_GLFWmonitor* monitor, const GLFWvidmode* desired);
 void _glfwRestoreVideoModeWin32(_GLFWmonitor* monitor);
 void _glfwGetMonitorContentScaleWin32(HMONITOR handle, float* xscale, float* yscale);
-

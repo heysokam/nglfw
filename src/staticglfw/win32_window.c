@@ -35,6 +35,7 @@
 #include <string.h>
 #include <windowsx.h>
 #include <shellapi.h>
+#include <imm.h>
 
 // Returns the window style for the specified window
 //
@@ -1178,6 +1179,58 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
             DragFinish(drop);
             return 0;
         }
+
+        case WM_IME_STARTCOMPOSITION:
+        {
+            // Set the composition window position.
+            HIMC hIMC = ImmGetContext(hWnd);
+            COMPOSITIONFORM cf;
+            cf.dwStyle = CFS_POINT;
+            cf.ptCurrentPos.x = window->win32.imeX - 2;
+            cf.ptCurrentPos.y = window->win32.imeY - 18;
+            BOOL ok = ImmSetCompositionWindow(hIMC, &cf);
+            ImmReleaseContext(hWnd, hIMC);
+            return 0; // Hides the condidate window.
+        }
+
+        case WM_IME_COMPOSITION:
+        {
+            HIMC hIMC = ImmGetContext(hWnd);
+
+            if (lParam & GCS_CURSORPOS)
+            {
+                // Sets the imeEditLocation
+                int loc = ImmGetCompositionString(hIMC, GCS_CURSORPOS, NULL, 0);
+                window->win32.imeEditLocation = loc;
+            }
+
+            if (lParam & GCS_RESULTSTR)
+            {
+                // Clears the imeEditString and imeEditLocation
+                window->win32.imeEditString[0] = 0;
+                window->win32.imeEditLocation = 0;
+            }
+
+			if (lParam & GCS_COMPSTR)
+			{
+                // Sets the imeEditString.
+				WCHAR szBuffer[256] = { 0, };
+				int size = ImmGetCompositionString(hIMC, GCS_COMPSTR, szBuffer, sizeof(WCHAR)* 256);
+				if (size > 0)
+				{
+                    char* s = _glfwCreateUTF8FromWideStringWin32(szBuffer);
+                    strcpy(window->win32.imeEditString, s);
+                    free(s);
+				} else {
+                    window->win32.imeEditString[0] = 0;
+                }
+
+                lParam &= ~(GCS_RESULTSTR | GCS_RESULTCLAUSE | GCS_RESULTREADCLAUSE | GCS_RESULTREADSTR);
+			}
+
+            ImmReleaseContext(hWnd, hIMC);
+            break;
+        }
     }
 
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
@@ -2259,3 +2312,14 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
     return window->win32.handle;
 }
 
+void _glfwPlatformSetImePos(_GLFWwindow* window, int x, int y)
+{
+    window->win32.imeX = x;
+    window->win32.imeY = y;
+}
+
+void _glfwPlatformGetIme(_GLFWwindow* window, int* location, char* string)
+{
+    *location = window->win32.imeEditLocation;
+    memcpy(string, window->win32.imeEditString, 256);
+}
