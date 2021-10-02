@@ -690,18 +690,14 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
     else
         markedText = [[NSMutableAttributedString alloc] initWithString:string];
 
-    NSString *str = [markedText string];
-    printf("[%s] %i %i : %i %i\n",
-        [str UTF8String],
-        selectedRange.location,
-        selectedRange.length,
-        replacementRange.location,
-        replacementRange.length
-    );
-
+    // Set IME Edit Location.
     window->imeEditLocation = selectedRange.location;
-    char* strWillGc = [str UTF8String];
-    memcpy(window->imeEditString, strWillGc, 256);
+
+    // Set IME Edit String.
+    NSString *str = [markedText string];
+    char* s = [str UTF8String];
+    memcpy(window->imeEditString, s, 256);
+
 }
 
 - (void)unmarkText
