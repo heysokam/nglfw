@@ -317,11 +317,6 @@ typedef struct _GLFWwindowWin32
     // The last received cursor position, regardless of source
     int                 lastCursorPosX, lastCursorPosY;
 
-    // Desired location of the IME Box.
-    int             imeX, imeY;
-    char            imeEditString[256];
-    int             imeEditLocation;
-
 } _GLFWwindowWin32;
 
 // Win32-specific global data

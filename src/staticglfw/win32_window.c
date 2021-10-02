@@ -1186,8 +1186,8 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
             HIMC hIMC = ImmGetContext(hWnd);
             COMPOSITIONFORM cf;
             cf.dwStyle = CFS_POINT;
-            cf.ptCurrentPos.x = window->win32.imeX - 2;
-            cf.ptCurrentPos.y = window->win32.imeY - 18;
+            cf.ptCurrentPos.x = window->imeX - 2;
+            cf.ptCurrentPos.y = window->imeY - 18;
             BOOL ok = ImmSetCompositionWindow(hIMC, &cf);
             ImmReleaseContext(hWnd, hIMC);
             return 0; // Hides the condidate window.
@@ -1201,7 +1201,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
             {
                 // Sets the imeEditLocation
                 int loc = ImmGetCompositionString(hIMC, GCS_CURSORPOS, NULL, 0);
-                window->win32.imeEditLocation = loc;
+                window->imeEditLocation = loc;
             }
 
             if (lParam & GCS_COMPSTR)
@@ -1218,18 +1218,18 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 if (size > 0)
                 {
                     char* s = _glfwCreateUTF8FromWideStringWin32(szBuffer);
-                    strcpy(window->win32.imeEditString, s);
+                    strcpy(window->imeEditString, s);
                     free(s);
                 } else {
-                    window->win32.imeEditString[0] = 0;
+                    window->imeEditString[0] = 0;
                 }
             }
 
             if (lParam & GCS_RESULTSTR)
             {
                 // Clears the imeEditString and imeEditLocation
-                window->win32.imeEditString[0] = 0;
-                window->win32.imeEditLocation = 0;
+                window->imeEditString[0] = 0;
+                window->imeEditLocation = 0;
             }
 
             ImmReleaseContext(hWnd, hIMC);
@@ -2314,16 +2314,4 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
     _GLFWwindow* window = (_GLFWwindow*) handle;
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     return window->win32.handle;
-}
-
-void _glfwPlatformSetImePos(_GLFWwindow* window, int x, int y)
-{
-    window->win32.imeX = x;
-    window->win32.imeY = y;
-}
-
-void _glfwPlatformGetIme(_GLFWwindow* window, int* location, char* string)
-{
-    *location = window->win32.imeEditLocation;
-    memcpy(string, window->win32.imeEditString, 256);
 }

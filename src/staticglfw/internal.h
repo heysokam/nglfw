@@ -396,6 +396,11 @@ struct _GLFWwindow
     double              virtualCursorPosX, virtualCursorPosY;
     GLFWbool            rawMouseMotion;
 
+    // IME paramters
+    int                 imeX, imeY;
+    char                imeEditString[256];
+    int                 imeEditLocation;
+
     _GLFWcontext        context;
 
     struct {

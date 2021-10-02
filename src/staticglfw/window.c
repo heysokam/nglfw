@@ -1113,7 +1113,8 @@ GLFWAPI void glfwSetImePos(GLFWwindow* handle, int* xpos, int* ypos)
     if (window->monitor)
         return;
 
-    _glfwPlatformSetImePos(window, xpos, ypos);
+    window->imeX = xpos;
+    window->imeY = ypos;
 }
 
 GLFWAPI void glfwGetIme(GLFWwindow* handle, int* location, char* string)
@@ -1126,5 +1127,6 @@ GLFWAPI void glfwGetIme(GLFWwindow* handle, int* location, char* string)
     if (window->monitor)
         return;
 
-    _glfwPlatformGetIme(window, location, string);
+    *location = window->imeEditLocation;
+    memcpy(string, window->imeEditString, 256);
 }
