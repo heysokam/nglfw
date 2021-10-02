@@ -1215,7 +1215,13 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
 			{
                 // Sets the imeEditString.
 				WCHAR szBuffer[256] = { 0, };
-				int size = ImmGetCompositionString(hIMC, GCS_COMPSTR, szBuffer, sizeof(WCHAR)* 256);
+				int size = ImmGetCompositionString(
+                    hIMC,
+                    GCS_COMPSTR,
+                    szBuffer,
+                    sizeof(WCHAR)* 256
+                );
+
 				if (size > 0)
 				{
                     char* s = _glfwCreateUTF8FromWideStringWin32(szBuffer);
@@ -1224,9 +1230,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
 				} else {
                     window->win32.imeEditString[0] = 0;
                 }
-
-                lParam &= ~(GCS_RESULTSTR | GCS_RESULTCLAUSE | GCS_RESULTREADCLAUSE | GCS_RESULTREADSTR);
-			}
+            }
 
             ImmReleaseContext(hWnd, hIMC);
             break;
