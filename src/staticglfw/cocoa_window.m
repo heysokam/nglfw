@@ -1854,6 +1854,30 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance,
     } // autoreleasepool
 }
 
+GLFWAPI void _glfwPlatformCloseIme(GLFWwindow* handle)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+
+    // Dump IME edit characters into text.
+    NSString* characters = [NSString
+        stringWithUTF8String:window->imeEditString];
+    const NSUInteger length = [characters length];
+    for (NSUInteger i = 0;  i < length;  i++)
+    {
+        const unichar codepoint = [characters characterAtIndex:i];
+        if ((codepoint & 0xff00) == 0xf700)
+            continue;
+        _glfwInputChar(window, codepoint, 0, 1);
+    }
+
+    // Close IME window
+    NSTextInputContext* inputContext = [window->ns.view inputContext];
+    [inputContext discardMarkedText];
+
+    // Clear IME state.
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////

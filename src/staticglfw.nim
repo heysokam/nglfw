@@ -533,3 +533,4 @@ when defined(windows):
 # My Extra functions:
 proc setImePos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetImePos".}
 proc getIme*(window: Window, location: ptr[cint], string: cstring) {.cdecl, importc: "glfwGetIme".}
+proc closeIme*(window: Window) {.cdecl, importc: "glfwCloseIme".}
