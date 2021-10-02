@@ -699,9 +699,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         replacementRange.length
     );
 
-    window->ns.imeEditLocation = selectedRange.location;
+    window->imeEditLocation = selectedRange.location;
     char* strWillGc = [str UTF8String];
-    memcpy(window->ns.imeEditString, strWillGc, 256);
+    memcpy(window->imeEditString, strWillGc, 256);
 }
 
 - (void)unmarkText
@@ -733,8 +733,8 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
     // Returns window + IME position.
     return NSMakeRect(
-        contentRect.origin.x + window->ns.imeX,
-        contentRect.origin.y + contentRect.size.height - 1 - window->ns.imeY,
+        contentRect.origin.x + window->imeX,
+        contentRect.origin.y + contentRect.size.height - 1 - window->imeY,
         10.0,
         0.0
     );
@@ -763,8 +763,8 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         _glfwInputChar(window, codepoint, mods, plain);
     }
 
-    window->ns.imeEditLocation = 0;
-    window->ns.imeEditString[0] = '\0';
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
 }
 
 - (void)doCommandBySelector:(SEL)selector
@@ -1868,25 +1868,4 @@ GLFWAPI id glfwGetCocoaWindow(GLFWwindow* handle)
     _GLFWwindow* window = (_GLFWwindow*) handle;
     _GLFW_REQUIRE_INIT_OR_RETURN(nil);
     return window->ns.object;
-}
-
-void _glfwPlatformSetImePos(_GLFWwindow* window, int x, int y)
-{
-    @autoreleasepool {
-
-    window->ns.imeX = x;
-    window->ns.imeY = y;
-
-    } // autoreleasepool
-}
-
-void _glfwPlatformGetIme(_GLFWwindow* window, int* location, char* string)
-{
-    @autoreleasepool {
-
-    location[0] = window->ns.imeEditLocation;
-
-    memcpy(string, window->ns.imeEditString, 256);
-
-    } // autoreleasepool
 }
