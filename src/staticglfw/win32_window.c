@@ -1204,13 +1204,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 window->win32.imeEditLocation = loc;
             }
 
-            if (lParam & GCS_RESULTSTR)
-            {
-                // Clears the imeEditString and imeEditLocation
-                window->win32.imeEditString[0] = 0;
-                window->win32.imeEditLocation = 0;
-            }
-
             if (lParam & GCS_COMPSTR)
             {
                 // Sets the imeEditString.
@@ -1230,6 +1223,13 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 } else {
                     window->win32.imeEditString[0] = 0;
                 }
+            }
+
+            if (lParam & GCS_RESULTSTR)
+            {
+                // Clears the imeEditString and imeEditLocation
+                window->win32.imeEditString[0] = 0;
+                window->win32.imeEditLocation = 0;
             }
 
             ImmReleaseContext(hWnd, hIMC);
