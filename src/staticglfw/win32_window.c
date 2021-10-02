@@ -1211,23 +1211,23 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
                 window->win32.imeEditLocation = 0;
             }
 
-			if (lParam & GCS_COMPSTR)
-			{
+            if (lParam & GCS_COMPSTR)
+            {
                 // Sets the imeEditString.
-				WCHAR szBuffer[256] = { 0, };
-				int size = ImmGetCompositionString(
+                WCHAR szBuffer[256] = { 0, };
+                int size = ImmGetCompositionString(
                     hIMC,
                     GCS_COMPSTR,
                     szBuffer,
                     sizeof(WCHAR)* 256
                 );
 
-				if (size > 0)
-				{
+                if (size > 0)
+                {
                     char* s = _glfwCreateUTF8FromWideStringWin32(szBuffer);
                     strcpy(window->win32.imeEditString, s);
                     free(s);
-				} else {
+                } else {
                     window->win32.imeEditString[0] = 0;
                 }
             }
