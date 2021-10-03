@@ -2304,6 +2304,35 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance,
     return err;
 }
 
+GLFWAPI void _glfwPlatformCloseIme(GLFWwindow* handle)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+
+    // Dump IME edit characters into text.
+    WCHAR* wideEditString = _glfwCreateWideStringFromUTF8Win32(
+        window->imeEditString
+    );
+    for (int i = 0;  i < 256;  i++)
+    {
+        const WCHAR codepoint = wideEditString[i];
+        if ((codepoint & 0xff00) == 0xf700)
+            continue;
+        if (codepoint == 0)
+            break;
+        _glfwInputChar(window, codepoint, 0, 1);
+    }
+    free(wideEditString);
+
+    // Close IME window
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+    ImmNotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+    ImmReleaseContext(hWnd, hIMC);
+
+    // Clear IME state.
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////
