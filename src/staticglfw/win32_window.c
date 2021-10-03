@@ -35,6 +35,7 @@
 #include <string.h>
 #include <windowsx.h>
 #include <shellapi.h>
+#include <imm.h>
 
 // Returns the window style for the specified window
 //
@@ -1178,6 +1179,62 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg,
             DragFinish(drop);
             return 0;
         }
+
+        case WM_IME_STARTCOMPOSITION:
+        {
+            // Set the composition window position.
+            HIMC hIMC = ImmGetContext(hWnd);
+            COMPOSITIONFORM cf;
+            cf.dwStyle = CFS_POINT;
+            cf.ptCurrentPos.x = window->imeX - 2;
+            cf.ptCurrentPos.y = window->imeY - 18;
+            BOOL ok = ImmSetCompositionWindow(hIMC, &cf);
+            ImmReleaseContext(hWnd, hIMC);
+            return 0; // Hides the condidate window.
+        }
+
+        case WM_IME_COMPOSITION:
+        {
+            HIMC hIMC = ImmGetContext(hWnd);
+
+            if (lParam & GCS_CURSORPOS)
+            {
+                // Sets the imeEditLocation
+                int loc = ImmGetCompositionString(hIMC, GCS_CURSORPOS, NULL, 0);
+                window->imeEditLocation = loc;
+            }
+
+            if (lParam & GCS_COMPSTR)
+            {
+                // Sets the imeEditString.
+                WCHAR szBuffer[256] = { 0, };
+                int size = ImmGetCompositionString(
+                    hIMC,
+                    GCS_COMPSTR,
+                    szBuffer,
+                    sizeof(WCHAR)* 256
+                );
+
+                if (size > 0)
+                {
+                    char* s = _glfwCreateUTF8FromWideStringWin32(szBuffer);
+                    strcpy(window->imeEditString, s);
+                    free(s);
+                } else {
+                    window->imeEditString[0] = 0;
+                }
+            }
+
+            if (lParam & GCS_RESULTSTR)
+            {
+                // Clears the imeEditString and imeEditLocation
+                window->imeEditString[0] = 0;
+                window->imeEditLocation = 0;
+            }
+
+            ImmReleaseContext(hWnd, hIMC);
+            break;
+        }
     }
 
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
@@ -2247,6 +2304,35 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance,
     return err;
 }
 
+GLFWAPI void _glfwPlatformCloseIme(GLFWwindow* handle)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+
+    // Dump IME edit characters into text.
+    WCHAR* wideEditString = _glfwCreateWideStringFromUTF8Win32(
+        window->imeEditString
+    );
+    for (int i = 0;  i < 256;  i++)
+    {
+        const WCHAR codepoint = wideEditString[i];
+        if ((codepoint & 0xff00) == 0xf700)
+            continue;
+        if (codepoint == 0)
+            break;
+        _glfwInputChar(window, codepoint, 0, 1);
+    }
+    free(wideEditString);
+
+    // Close IME window
+    HWND hWnd = window->win32.handle;
+    HIMC hIMC = ImmGetContext(hWnd);
+    ImmNotifyIME(hIMC, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+    ImmReleaseContext(hWnd, hIMC);
+
+    // Clear IME state.
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////
@@ -2258,4 +2344,3 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     return window->win32.handle;
 }
-

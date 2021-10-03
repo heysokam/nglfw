@@ -689,6 +689,15 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
         markedText = [[NSMutableAttributedString alloc] initWithAttributedString:string];
     else
         markedText = [[NSMutableAttributedString alloc] initWithString:string];
+
+    // Set IME Edit Location.
+    window->imeEditLocation = selectedRange.location;
+
+    // Set IME Edit String.
+    NSString *str = [markedText string];
+    char* s = [str UTF8String];
+    memcpy(window->imeEditString, s, 256);
+
 }
 
 - (void)unmarkText
@@ -715,8 +724,17 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 - (NSRect)firstRectForCharacterRange:(NSRange)range
                          actualRange:(NSRangePointer)actualRange
 {
-    const NSRect frame = [window->ns.view frame];
-    return NSMakeRect(frame.origin.x, frame.origin.y, 0.0, 0.0);
+    const NSRect contentRect =
+        [window->ns.object contentRectForFrameRect:[window->ns.object frame]];
+
+    // Returns window + IME position.
+    return NSMakeRect(
+        contentRect.origin.x + window->imeX,
+        contentRect.origin.y + contentRect.size.height - 1 - window->imeY,
+        10.0,
+        0.0
+    );
+
 }
 
 - (void)insertText:(id)string replacementRange:(NSRange)replacementRange
@@ -740,6 +758,9 @@ static const NSRange kEmptyRange = { NSNotFound, 0 };
 
         _glfwInputChar(window, codepoint, mods, plain);
     }
+
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
 }
 
 - (void)doCommandBySelector:(SEL)selector
@@ -1833,6 +1854,30 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance,
     } // autoreleasepool
 }
 
+GLFWAPI void _glfwPlatformCloseIme(GLFWwindow* handle)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+
+    // Dump IME edit characters into text.
+    NSString* characters = [NSString
+        stringWithUTF8String:window->imeEditString];
+    const NSUInteger length = [characters length];
+    for (NSUInteger i = 0;  i < length;  i++)
+    {
+        const unichar codepoint = [characters characterAtIndex:i];
+        if ((codepoint & 0xff00) == 0xf700)
+            continue;
+        _glfwInputChar(window, codepoint, 0, 1);
+    }
+
+    // Close IME window
+    NSTextInputContext* inputContext = [window->ns.view inputContext];
+    [inputContext discardMarkedText];
+
+    // Clear IME state.
+    window->imeEditLocation = 0;
+    window->imeEditString[0] = '\0';
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////
@@ -1844,4 +1889,3 @@ GLFWAPI id glfwGetCocoaWindow(GLFWwindow* handle)
     _GLFW_REQUIRE_INIT_OR_RETURN(nil);
     return window->ns.object;
 }
-

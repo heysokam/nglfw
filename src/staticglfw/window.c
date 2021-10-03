@@ -1102,3 +1102,31 @@ GLFWAPI void glfwPostEmptyEvent(void)
     _GLFW_REQUIRE_INIT();
     _glfwPlatformPostEmptyEvent();
 }
+
+GLFWAPI void glfwSetImePos(GLFWwindow* handle, int* xpos, int* ypos)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT();
+
+    if (window->monitor)
+        return;
+
+    window->imeX = xpos;
+    window->imeY = ypos;
+}
+
+GLFWAPI void glfwGetIme(GLFWwindow* handle, int* location, char* string)
+{
+    _GLFWwindow* window = (_GLFWwindow*) handle;
+    assert(window != NULL);
+
+    _GLFW_REQUIRE_INIT();
+
+    if (window->monitor)
+        return;
+
+    *location = window->imeEditLocation;
+    memcpy(string, window->imeEditString, 256);
+}

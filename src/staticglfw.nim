@@ -3,13 +3,14 @@ when defined(emscripten):
 else:
   when defined(windows):
     when defined(gcc):
-      {.passC: "-D_GLFW_WIN32", passL: "-lopengl32 -lgdi32".}
+      {.passC: "-D_GLFW_WIN32", passL: "-lopengl32 -lgdi32 -limm32".}
     when defined(vcc):
       {.passC: "-D_GLFW_WIN32".}
       {.link: "kernel32.lib".}
       {.link: "gdi32.lib".}
       {.link: "shell32.lib".}
       {.link: "user32.lib".}
+      {.link: "imm32.lib".}
     {.
       compile: "staticglfw/win32_init.c",
       compile: "staticglfw/win32_joystick.c",
@@ -528,3 +529,8 @@ proc createWindowSurface*(instance: VkInstance, window: Window, allocator: ptr V
 # Native functions
 when defined(windows):
   proc getWin32Window*(window: Window): cint {.cdecl, importc: "glfwGetWin32Window".}
+
+# My Extra functions:
+proc setImePos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetImePos".}
+proc getIme*(window: Window, location: ptr[cint], string: cstring) {.cdecl, importc: "glfwGetIme".}
+proc closeIme*(window: Window) {.cdecl, importc: "glfwCloseIme".}
