@@ -3197,6 +3197,10 @@ VkResult _glfwPlatformCreateWindowSurface(VkInstance instance,
     }
 }
 
+GLFWAPI void _glfwPlatformCloseIme(GLFWwindow* handle)
+{
+    //TODO: Implment IME on linux.
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////                        GLFW native API                       //////
@@ -3240,4 +3244,3 @@ GLFWAPI const char* glfwGetX11SelectionString(void)
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     return getSelectionString(_glfw.x11.PRIMARY);
 }
-
