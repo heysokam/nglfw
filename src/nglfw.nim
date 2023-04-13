@@ -12,29 +12,31 @@ else:
       {.link: "user32.lib".}
       {.link: "imm32.lib".}
     {.
-      compile: "staticglfw/win32_init.c",
-      compile: "staticglfw/win32_joystick.c",
-      compile: "staticglfw/win32_monitor.c",
-      compile: "staticglfw/win32_time.c",
-      compile: "staticglfw/win32_thread.c",
-      compile: "staticglfw/win32_window.c",
-      compile: "staticglfw/wgl_context.c",
-      compile: "staticglfw/egl_context.c",
-      compile: "staticglfw/osmesa_context.c"
+      compile: "nglfw/win32_init.c",
+      compile: "nglfw/win32_joystick.c",
+      compile: "nglfw/win32_monitor.c",
+      compile: "nglfw/win32_time.c",
+      compile: "nglfw/win32_thread.c",
+      compile: "nglfw/win32_window.c",
+      compile: "nglfw/wgl_context.c",
+      compile: "nglfw/egl_context.c",
+      compile: "nglfw/osmesa_context.c"
+      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WIN32".}
     .}
   elif defined(macosx):
     {.
       passC: "-D_GLFW_COCOA",
       passL: "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo",
-      compile: "staticglfw/cocoa_init.m",
-      compile: "staticglfw/cocoa_joystick.m",
-      compile: "staticglfw/cocoa_monitor.m",
-      compile: "staticglfw/cocoa_window.m",
-      compile: "staticglfw/cocoa_time.c",
-      compile: "staticglfw/posix_thread.c",
-      compile: "staticglfw/nsgl_context.m",
-      compile: "staticglfw/egl_context.c",
-      compile: "staticglfw/osmesa_context.c"
+      compile: "nglfw/cocoa_init.m",
+      compile: "nglfw/cocoa_joystick.m",
+      compile: "nglfw/cocoa_monitor.m",
+      compile: "nglfw/cocoa_window.m",
+      compile: "nglfw/cocoa_time.c",
+      compile: "nglfw/posix_thread.c",
+      compile: "nglfw/nsgl_context.m",
+      compile: "nglfw/egl_context.c",
+      compile: "nglfw/osmesa_context.c"
+      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_COCOA".}
     .}
   elif defined(linux):
     {.passL: "-pthread -lGL -lX11 -lXrandr -lXxf86vm -lXi -lXcursor -lm -lXinerama".}
@@ -42,50 +44,52 @@ else:
     when defined(wayland):
       {.
         passC: "-D_GLFW_WAYLAND",
-        compile: "staticglfw/wl_init.c",
-        compile: "staticglfw/wl_monitor.c",
-        compile: "staticglfw/wl_window.c",
-        compile: "staticglfw/posix_time.c",
-        compile: "staticglfw/posix_thread.c",
-        compile: "staticglfw/xkb_unicode.c",
-        compile: "staticglfw/egl_context.c",
-        compile: "staticglfw/osmesa_context.c"
+        compile: "nglfw/wl_init.c",
+        compile: "nglfw/wl_monitor.c",
+        compile: "nglfw/wl_window.c",
+        compile: "nglfw/posix_time.c",
+        compile: "nglfw/posix_thread.c",
+        compile: "nglfw/xkb_unicode.c",
+        compile: "nglfw/egl_context.c",
+        compile: "nglfw/osmesa_context.c"
       .}
+      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WAYLAND".}
     else:
       {.
         passC: "-D_GLFW_X11",
-        compile: "staticglfw/x11_init.c",
-        compile: "staticglfw/x11_monitor.c",
-        compile: "staticglfw/x11_window.c",
-        compile: "staticglfw/xkb_unicode.c",
-        compile: "staticglfw/posix_time.c",
-        compile: "staticglfw/posix_thread.c",
-        compile: "staticglfw/glx_context.c",
-        compile: "staticglfw/egl_context.c",
-        compile: "staticglfw/osmesa_context.c"
+        compile: "nglfw/x11_init.c",
+        compile: "nglfw/x11_monitor.c",
+        compile: "nglfw/x11_window.c",
+        compile: "nglfw/xkb_unicode.c",
+        compile: "nglfw/posix_time.c",
+        compile: "nglfw/posix_thread.c",
+        compile: "nglfw/glx_context.c",
+        compile: "nglfw/egl_context.c",
+        compile: "nglfw/osmesa_context.c"
       .}
+      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_X11".}
 
-    {.compile: "staticglfw/linux_joystick.c".}
+    {.compile: "nglfw/linux_joystick.c".}
   else:
     # If unsupported/unknown OS, use null system
     {.
-      compile: "staticglfw/null_init.c",
-      compile: "staticglfw/null_monitor.c",
-      compile: "staticglfw/null_window.c",
-      compile: "staticglfw/null_joystick.c",
-      compile: "staticglfw/posix_time.c",
-      compile: "staticglfw/posix_thread.c",
-      compile: "staticglfw/osmesa_context.c"
+      compile: "nglfw/null_init.c",
+      compile: "nglfw/null_monitor.c",
+      compile: "nglfw/null_window.c",
+      compile: "nglfw/null_joystick.c",
+      compile: "nglfw/posix_time.c",
+      compile: "nglfw/posix_thread.c",
+      compile: "nglfw/osmesa_context.c"
     .}
 
   # Common
   {.
-    compile: "staticglfw/context.c",
-    compile: "staticglfw/init.c",
-    compile: "staticglfw/input.c",
-    compile: "staticglfw/monitor.c",
-    compile: "staticglfw/vulkan.c",
-    compile: "staticglfw/window.c"
+    compile: "nglfw/context.c",
+    compile: "nglfw/init.c",
+    compile: "nglfw/input.c",
+    compile: "nglfw/monitor.c",
+    compile: "nglfw/vulkan.c",
+    compile: "nglfw/window.c"
   .}
 
 const
@@ -531,9 +535,13 @@ when defined(windows):
   proc getWin32Window*(window: Window): cint {.cdecl, importc: "glfwGetWin32Window".}
 when defined(macosx):
   proc getCocoaWindow*(window: Window): clong {.cdecl, importc: "glfwGetCocoaWindow".}
-
+when defined(linux) and defined(wayland):
+  proc getWaylandWindow*(GLFWwindow* window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
+when defined(linux) and not defined(wayland):
+  proc getX11Window*(window :Window) :clong {.cdecl, importc: "glfwGetX11Window".}
 
 # My Extra functions:
 proc setImePos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetImePos".}
 proc getIme*(window: Window, location: ptr[cint], string: cstring) {.cdecl, importc: "glfwGetIme".}
 proc closeIme*(window: Window) {.cdecl, importc: "glfwCloseIme".}
+
