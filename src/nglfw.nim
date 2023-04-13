@@ -536,7 +536,7 @@ when defined(windows):
 when defined(macosx):
   proc getCocoaWindow*(window: Window): clong {.cdecl, importc: "glfwGetCocoaWindow".}
 when defined(linux) and defined(wayland):
-  proc getWaylandWindow*(GLFWwindow* window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
+  proc getWaylandWindow*(windo :Window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
 when defined(linux) and not defined(wayland):
   proc getX11Window*(window :Window) :clong {.cdecl, importc: "glfwGetX11Window".}
 
