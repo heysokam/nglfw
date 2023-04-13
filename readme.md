@@ -1,6 +1,18 @@
-# Static GLFW for nim
+# Static GLFW for Nim
+Statically linked GLFW. Its functionality gets included into your binary.  
+Removes the need for distributing your own copy of glfw.dll / libglfw3.dylib.
 
-This library is always statically linked so only the functionality you use gets included in the binary. There is also no need for glfw.dll or libglfw3.dylib to be included.
+Fork of `treeform/staticglfw`, the original is no longer maintained.
+
+TODO:
+- [ ] Support for `wgpu-native`.
+- [ ] Support for raw mouse input.
+- [ ] Fix crashing on `-d:danger`.
+- [ ] Hello Window example.
+- [ ] Mini-framebuffer example.
+
+Functionality added:
+- [ ] ...
 
 ## Example
 
@@ -42,7 +54,5 @@ terminate()
 ```
 
 ## GLFW version:
-
-Version: 3.3.2
-
+Version: 3.3.2  
 Currently tracking this commit: https://github.com/glfw/glfw/commit/bf1c62b2612dba79365e836830fe2a6105adbe78
