@@ -530,18 +530,28 @@ proc getInstanceProcAddress*(instance: VkInstance, procname: cstring): VKProc {.
 proc getPhysicalDevicePresentationSupport*(instance: VkInstance, device: VkPhysicalDevice, queuefamily: cuint): cint {.cdecl, importc: "glfwGetPhysicalDevicePresentationSupport".}
 proc createWindowSurface*(instance: VkInstance, window: Window, allocator: ptr VkAllocationCallbacks, surface: ptr VkSurfaceKHR): VkResult {.cdecl, importc: "glfwCreateWindowSurface".}
 
+#________________________________________
 # Native functions
+#___________________
 when defined(windows):
-  proc getWin32Window*(window: Window): cint {.cdecl, importc: "glfwGetWin32Window".}
-when defined(macosx):
-  proc getCocoaWindow*(window: Window): clong {.cdecl, importc: "glfwGetCocoaWindow".}
-when defined(linux) and defined(wayland):
-  proc getWaylandWindow*(windo :Window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
-when defined(linux) and not defined(wayland):
+  proc getWin32Window *(window :Window) :cint {.cdecl, importc: "glfwGetWin32Window".}
+#___________________
+elif defined(macosx):
+  proc getCocoaWindow *(window :Window) :clong {.cdecl, importc: "glfwGetCocoaWindow".}
+#___________________
+elif defined(linux) and defined(wayland):
+  proc getWaylandDisplay *() :clong {.cdecl, importc: "glfwGetWaylandDisplay".}
+  proc getWaylandWindow *(window :Window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
+#___________________
+elif defined(linux) and not defined(wayland):
+  proc getX11Display*() :clong {.cdecl, importc: "glfwGetX11Display".}
   proc getX11Window*(window :Window) :clong {.cdecl, importc: "glfwGetX11Window".}
 
+
+#________________________________________
 # My Extra functions:
-proc setImePos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetImePos".}
-proc getIme*(window: Window, location: ptr[cint], string: cstring) {.cdecl, importc: "glfwGetIme".}
-proc closeIme*(window: Window) {.cdecl, importc: "glfwCloseIme".}
+#___________________
+proc setImePos *(window :Window; xpos :cint; ypos :cint) {.cdecl, importc: "glfwSetImePos".}
+proc getIme    *(window :Window; location :ptr[cint]; string :cstring) {.cdecl, importc: "glfwGetIme".}
+proc closeIme  *(window :Window) {.cdecl, importc: "glfwCloseIme".}
 
