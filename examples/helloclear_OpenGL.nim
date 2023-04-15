@@ -1,4 +1,10 @@
-import opengl, staticglfw
+#:_____________________________________________________
+#  nglfw  |  Copyright (C) Ivan Mar (sOkam!)  |  MIT  |
+#:_____________________________________________________
+# Simplest possible ClearWindow with OpenGL.  |
+#_____________________________________________|
+import nglfw
+import opengl
 
 # Init GLFW
 if init() == 0:
