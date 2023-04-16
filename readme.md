@@ -5,19 +5,21 @@ Removes the need for distributing your own copy of glfw.dll / libglfw3.dylib.
 Fork of `treeform/staticglfw`, the original is no longer maintained.
 
 TODO:
-- [ ] Support for `wgpu-native`.
+- [ ] Upgrade
+  - [ ] Apply: https://github.com/DanielBelmes/glfw/commit/06e74d271021365ca3582adbfabef74138fb43e1
+  - [ ] Update to latest
 - [ ] Support for raw mouse input.
 - [ ] Fix crashing on `-d:danger`.
-- [ ] Hello Window example.
 - [ ] Mini-framebuffer example.
 
-Functionality added:
-- [ ] ...
+Added:
+- [x] Support for native window creation (wgpu, etc):
+- [x] Hello Window example, (NoAPI: for vulkan and wgpu-native)
 
 ## Example
 
 ```nim
-import staticglfw
+import nglfw
 import opengl
 
 # Init GLFW
@@ -55,4 +57,4 @@ terminate()
 
 ## GLFW version:
 Version: 3.3.2  
-Currently tracking this commit: https://github.com/glfw/glfw/commit/bf1c62b2612dba79365e836830fe2a6105adbe78
+Currently tracking: https://github.com/glfw/glfw/commit/bf1c62b2612dba79365e836830fe2a6105adbe78
