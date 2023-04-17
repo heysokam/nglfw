@@ -5,9 +5,6 @@ Removes the need for distributing your own copy of glfw.dll / libglfw3.dylib.
 Fork of `treeform/staticglfw`, the original is no longer maintained.
 
 TODO:
-- [ ] Upgrade
-  - [ ] Apply: https://github.com/DanielBelmes/glfw/commit/06e74d271021365ca3582adbfabef74138fb43e1
-  - [ ] Update to latest
 - [ ] Support for raw mouse input.
 - [ ] Fix crashing on `-d:danger`.
 - [ ] Mini-framebuffer example.
@@ -15,6 +12,9 @@ TODO:
 Added:
 - [x] Support for native window creation (wgpu, etc):
 - [x] Hello Window example, (NoAPI: for vulkan and wgpu-native)
+- [x] Upgrade
+  - [x] Apply: https://github.com/DanielBelmes/glfw/commit/06e74d271021365ca3582adbfabef74138fb43e1
+  - [x] Update to latest (3.3.8)
 
 ## Example
 
