@@ -1,6 +1,6 @@
 # Opens a window and quickly exists.
 
-import staticglfw
+import nglfw
 
 # Init GLFW
 if init() == 0:

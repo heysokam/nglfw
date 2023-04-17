@@ -5,7 +5,7 @@
 # Useful for running Vulkan and WebGPU apps.      |
 #_________________________________________________|
 # External dependencies
-from pkg/nglfw as glfw import nil
+from nglfw as glfw import nil
 
 #________________________________________________
 # window.nim

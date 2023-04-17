@@ -3,39 +3,35 @@ when defined(emscripten):
 else:
   when defined(windows):
     when defined(gcc):
-      {.passC: "-D_GLFW_WIN32", passL: "-lopengl32 -lgdi32 -limm32".}
+      {.passC: "-D_GLFW_WIN32", passL: "-lgdi32".}
     when defined(vcc):
       {.passC: "-D_GLFW_WIN32".}
       {.link: "kernel32.lib".}
       {.link: "gdi32.lib".}
       {.link: "shell32.lib".}
       {.link: "user32.lib".}
-      {.link: "imm32.lib".}
     {.
-      compile: "nglfw/win32_init.c",
-      compile: "nglfw/win32_joystick.c",
-      compile: "nglfw/win32_monitor.c",
-      compile: "nglfw/win32_time.c",
-      compile: "nglfw/win32_thread.c",
-      compile: "nglfw/win32_window.c",
-      compile: "nglfw/wgl_context.c",
-      compile: "nglfw/egl_context.c",
-      compile: "nglfw/osmesa_context.c"
+      compile: "glfw/src/win32_init.c",
+      compile: "glfw/src/win32_joystick.c",
+      compile: "glfw/src/win32_module.c",
+      compile: "glfw/src/win32_monitor.c",
+      compile: "glfw/src/win32_time.c",
+      compile: "glfw/src/win32_thread.c",
+      compile: "glfw/src/win32_window.c",
+      compile: "glfw/src/wgl_context.c",
       when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WIN32".}
     .}
   elif defined(macosx):
     {.
       passC: "-D_GLFW_COCOA",
-      passL: "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo",
-      compile: "nglfw/cocoa_init.m",
-      compile: "nglfw/cocoa_joystick.m",
-      compile: "nglfw/cocoa_monitor.m",
-      compile: "nglfw/cocoa_window.m",
-      compile: "nglfw/cocoa_time.c",
-      compile: "nglfw/posix_thread.c",
-      compile: "nglfw/nsgl_context.m",
-      compile: "nglfw/egl_context.c",
-      compile: "nglfw/osmesa_context.c"
+      passL: "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreFoundation",
+      compile: "glfw/src/cocoa_init.m",
+      compile: "glfw/src/cocoa_joystick.m",
+      compile: "glfw/src/cocoa_monitor.m",
+      compile: "glfw/src/cocoa_time.c",
+      compile: "glfw/src/cocoa_window.m",
+      compile: "glfw/src/posix_thread.c",
+      compile: "glfw/src/nsgl_context.m",
       when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_COCOA".}
     .}
   elif defined(linux):
@@ -44,58 +40,64 @@ else:
     when defined(wayland):
       {.
         passC: "-D_GLFW_WAYLAND",
-        compile: "nglfw/wl_init.c",
-        compile: "nglfw/wl_monitor.c",
-        compile: "nglfw/wl_window.c",
-        compile: "nglfw/posix_time.c",
-        compile: "nglfw/posix_thread.c",
-        compile: "nglfw/xkb_unicode.c",
-        compile: "nglfw/egl_context.c",
-        compile: "nglfw/osmesa_context.c"
+        compile: "glfw/src/wl_init.c",
+        compile: "glfw/src/wl_monitor.c",
+        compile: "glfw/src/wl_window.c",
+        compile: "glfw/src/posix_module.c",
+        compile: "glfw/src/posix_poll.c",
+        compile: "glfw/src/posix_thread.c",
+        compile: "glfw/src/posix_time.c",
+        compile: "glfw/src/xkb_unicode.c",
       .}
       when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WAYLAND".}
     else:
       {.
         passC: "-D_GLFW_X11",
-        compile: "nglfw/x11_init.c",
-        compile: "nglfw/x11_monitor.c",
-        compile: "nglfw/x11_window.c",
-        compile: "nglfw/xkb_unicode.c",
-        compile: "nglfw/posix_time.c",
-        compile: "nglfw/posix_thread.c",
-        compile: "nglfw/glx_context.c",
-        compile: "nglfw/egl_context.c",
-        compile: "nglfw/osmesa_context.c"
+        compile: "glfw/src/x11_init.c",
+        compile: "glfw/src/x11_monitor.c",
+        compile: "glfw/src/x11_window.c",
+        compile: "glfw/src/xkb_unicode.c",
+        compile: "glfw/src/posix_module.c",
+        compile: "glfw/src/posix_poll.c",
+        compile: "glfw/src/posix_thread.c",
+        compile: "glfw/src/posix_time.c",
+        compile: "glfw/src/glx_context.c",
       .}
       when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_X11".}
 
-    {.compile: "nglfw/linux_joystick.c".}
+    {.compile: "glfw/src/linux_joystick.c".}
   else:
     # If unsupported/unknown OS, use null system
     {.
-      compile: "nglfw/null_init.c",
-      compile: "nglfw/null_monitor.c",
-      compile: "nglfw/null_window.c",
-      compile: "nglfw/null_joystick.c",
-      compile: "nglfw/posix_time.c",
-      compile: "nglfw/posix_thread.c",
-      compile: "nglfw/osmesa_context.c"
+      compile: "glfw/src/posix_module.c",
+      compile: "glfw/src/posix_poll.c",
+      compile: "glfw/src/posix_thread.c",
+      compile: "glfw/src/posix_time.c",
     .}
 
   # Common
   {.
-    compile: "nglfw/context.c",
-    compile: "nglfw/init.c",
-    compile: "nglfw/input.c",
-    compile: "nglfw/monitor.c",
-    compile: "nglfw/vulkan.c",
-    compile: "nglfw/window.c"
+    compile: "glfw/src/context.c",
+    compile: "glfw/src/init.c",
+    compile: "glfw/src/input.c",
+    compile: "glfw/src/monitor.c",
+    compile: "glfw/src/platform.c",
+    compile: "glfw/src/vulkan.c",
+    compile: "glfw/src/window.c"
+    # The time, thread and module code is shared between all backends on a given OS,
+    # including the null backend, which still needs those bits to be functional
+    compile: "glfw/src/null_init.c",
+    compile: "glfw/src/null_joystick.c",
+    compile: "glfw/src/null_monitor.c",
+    compile: "glfw/src/null_window.c",
+    compile: "glfw/src/egl_context.c",
+    compile: "glfw/src/osmesa_context.c"
   .}
 
 const
   VERSION_MAJOR* = 3
-  VERSION_MINOR* = 3
-  VERSION_REVISION* = 2
+  VERSION_MINOR* = 4
+  VERSION_REVISION* = 0
 
   TRUE* = 1
   FALSE* = 0
@@ -358,9 +360,9 @@ const
 type
   GLProc* = proc() {.cdecl.}
   VKProc* = proc() {.cdecl.}
-  Monitor* = pointer
-  Window* = pointer
-  CursorHandle* = pointer
+  Monitor* = ptr object
+  Window* = ptr object
+  CursorHandle* = ptr object
   ErrorFun* = proc (errorCode: cint, description: cstring) {.cdecl.}
   WindowPosFun = proc (window: Window, x: cint, y: cint) {.cdecl.}
   WindowSizeFun* = proc (window: Window, width: cint, height: cint) {.cdecl.}
@@ -368,7 +370,9 @@ type
   WindowRefreshFun* = proc (window: Window) {.cdecl.}
   WindowFocusFun* = proc (window: Window, focused: cint) {.cdecl.}
   WindowIconifyFun* = proc (window: Window, iconified: cint) {.cdecl.}
+  # Missing WindowMaximizeFun
   FrameBufferSizeFun* = proc (window: Window, width: cint, height: cint) {.cdecl.}
+  # Missing windowContentScaleFun
   MouseButtonFun* = proc (window: Window, button: cint, action: cint, modifiers: cint) {.cdecl.}
   CursorPosFun* = proc (window: Window, x: cdouble, y: cdouble) {.cdecl.}
   CursorEnterFun* = proc (window: Window, entered: cint) {.cdecl.}
@@ -399,6 +403,8 @@ type
     height*: cint
     pixels*: cstring
 
+  # Missing GLFWgamepadstate
+
 # Methods
 proc init*(): cint {.cdecl, importc: "glfwInit".}
 proc terminate*() {.cdecl, importc: "glfwTerminate".}
@@ -426,7 +432,7 @@ proc setErrorCallback*(cbfun: ErrorFun): ErrorFun {.cdecl, importc: "glfwSetErro
 # Joystick functions
 proc joystickPresent*(joy: cint): cint {.cdecl, importc: "glfwJoystickPresent".}
 proc getJoystickAxes*(joy: cint, count: ptr cint): ptr cfloat {.cdecl, importc: "glfwGetJoystickAxes".}
-proc getJoystickButtons*(joy: cint, count: ptr cint): ptr cuchar {.cdecl, importc: "glfwGetJoystickButtons".}
+proc getJoystickButtons*(joy: cint, count: ptr cint): ptr uint8 {.cdecl, importc: "glfwGetJoystickButtons".}
 proc getJoystickName*(joy: cint): cstring {.cdecl, importc: "glfwGetJoystickName".}
 proc setJoystickCallback*(cbfun: JoystickFun): JoystickFun {.cdecl, importc: "glfwSetJoystickCallback".}
 # monitor functions
@@ -549,9 +555,9 @@ elif defined(linux) and not defined(wayland):
 
 
 #________________________________________
-# My Extra functions:
+# Extra functions from treeform/staticglfw
 #___________________
-proc setImePos *(window :Window; xpos :cint; ypos :cint) {.cdecl, importc: "glfwSetImePos".}
-proc getIme    *(window :Window; location :ptr[cint]; string :cstring) {.cdecl, importc: "glfwGetIme".}
-proc closeIme  *(window :Window) {.cdecl, importc: "glfwCloseIme".}
+# proc setImePos *(window :Window; xpos :cint; ypos :cint) {.cdecl, importc: "glfwSetImePos".}
+# proc getIme    *(window :Window; location :ptr[cint]; string :cstring) {.cdecl, importc: "glfwGetIme".}
+# proc closeIme  *(window :Window) {.cdecl, importc: "glfwCloseIme".}
 

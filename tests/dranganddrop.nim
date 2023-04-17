@@ -1,4 +1,4 @@
-import staticglfw
+import nglfw
 import opengl
 
 # Init GLFW

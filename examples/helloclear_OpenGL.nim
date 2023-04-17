@@ -3,8 +3,8 @@
 #:_____________________________________________________
 # Simplest possible ClearWindow with OpenGL.  |
 #_____________________________________________|
-import nglfw
 import opengl
+import nglfw
 
 # Init GLFW
 if init() == 0:
