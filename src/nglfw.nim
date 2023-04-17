@@ -19,8 +19,8 @@ else:
       compile: "glfw/src/win32_thread.c",
       compile: "glfw/src/win32_window.c",
       compile: "glfw/src/wgl_context.c",
-      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WIN32".}
     .}
+    when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WIN32".}
   elif defined(macosx):
     {.
       passC: "-D_GLFW_COCOA",
@@ -30,10 +30,11 @@ else:
       compile: "glfw/src/cocoa_monitor.m",
       compile: "glfw/src/cocoa_time.c",
       compile: "glfw/src/cocoa_window.m",
+      compile: "glfw/src/posix_module.c",
       compile: "glfw/src/posix_thread.c",
       compile: "glfw/src/nsgl_context.m",
-      when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_COCOA".}
     .}
+    when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_COCOA".}
   elif defined(linux):
     {.passL: "-pthread -lGL -lX11 -lXrandr -lXxf86vm -lXi -lXcursor -lm -lXinerama".}
 
