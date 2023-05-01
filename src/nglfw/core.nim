@@ -429,7 +429,8 @@ when defined(windows):
 #___________________
 elif defined(macosx):
   proc getCocoaWindow *(window :Window) :clong {.cdecl, importc: "glfwGetCocoaWindow".}
-  when defined(wgpu): proc getMetalLayer *(window :glfw.Window) :pointer {.importc: "macGetMetalLayer", header: "metal_glue.h", nodecl.}
+  when defined(wgpu):
+    proc getMetalLayer *(window :glfw.Window) :pointer {.importc: "macGetMetalLayer", header: "metal_glue.h", nodecl.}
 #___________________
 elif defined(linux) and defined(wayland):
   proc getWaylandDisplay *() :clong {.cdecl, importc: "glfwGetWaylandDisplay".}
@@ -440,7 +441,7 @@ elif defined(linux) and not defined(wayland):
   proc getX11Window*(window :Window) :clong {.cdecl, importc: "glfwGetX11Window".}
 #___________________
 else:
-  {.warning: "Native window creation for this platform is currently not supported.}
+  {.warning: "Native window creation for this platform is currently not supported.".}
 
 
 #________________________________________

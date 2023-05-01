@@ -2,6 +2,9 @@
 #  nglfw  |  Copyright (C) Ivan Mar (sOkam!)  |  MIT  |
 #:_____________________________________________________
 
+# Buildsystem
 include ./nglfw/compile
-include ./nglfw/core ; export core
+
+# Modules
+import  ./nglfw/core ; export core
 

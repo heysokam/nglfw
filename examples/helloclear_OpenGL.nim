@@ -7,7 +7,7 @@ import opengl
 import nglfw
 
 # Init GLFW
-if init() == 0:
+if not init():
   raise newException(Exception, "Failed to Initialize GLFW")
 
 # Open window.
