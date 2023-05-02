@@ -5,6 +5,10 @@
 // See ./metal_glue.h for more details.  |
 //_____________________________________|
 #include "./metal_glue.h"
+// For getting the CAMetalLayer.
+// Seems broken when placed in the header :think:
+#include <Foundation/Foundation.h>
+#include <QuartzCore/CAMetalLayer.h>
 
 id macGetMetalLayer(GLFWwindow* window) {
   id metal_layer = NULL;
@@ -14,4 +18,5 @@ id macGetMetalLayer(GLFWwindow* window) {
   [ns_window.contentView setLayer:metal_layer];
   return metal_layer;
 }
+
 

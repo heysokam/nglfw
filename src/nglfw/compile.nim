@@ -3,6 +3,13 @@
 #:_____________________________________________________
 # Buildsystem of the library  |
 #_____________________________|
+import std/os
+import std/strformat
+
+const thisDir  = currentSourcePath().parentDir()
+const rootDir  = thisDir/".."
+const glfwDir  = rootDir/"glfw"/"include"
+const nglfwDir = rootDir/"nglfw"
 
 when defined(emscripten):
   {.passL: "-s USE_WEBGL2=1 -s USE_GLFW=3".}
@@ -29,8 +36,8 @@ else:
     when defined(wgpu): {.passC: "-DGLFW_EXPOSE_NATIVE_WIN32".}
   elif defined(macosx):
     {.
-      passC: "-D_GLFW_COCOA",
-      passL: "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreFoundation",
+      passC:   "-D_GLFW_COCOA",
+      passL:   "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreFoundation",
       compile: "glfw/src/cocoa_init.m",
       compile: "glfw/src/cocoa_joystick.m",
       compile: "glfw/src/cocoa_monitor.m",
@@ -43,9 +50,11 @@ else:
     when defined(wgpu):
       {.
         passC:   "-DGLFW_EXPOSE_NATIVE_COCOA", # Expose native cocoa functions
-        passC:   "-Iglfw/include",             # Include glfw header folder for our metal glue file
+        passC:   &"-I{glfwDir}",               # Include glfw header folder so our metal_glue file can access it
+        passC:   &"-I{nglfwDir}",              # Include nglfw/ for the metal_glue.h file
         # Compile the metal glue file
         compile: ("nglfw/metal_glue.m", "-framework Metal -framework CoreVideo -framework QuartzCore"),
+        passL:   "metal_glue.m.o",  # Manually link to the metal_glue.o file
       .}
   elif defined(linux):
     {.passL: "-pthread -lGL -lX11 -lXrandr -lXxf86vm -lXi -lXcursor -lm -lXinerama".}

@@ -430,7 +430,7 @@ when defined(windows):
 elif defined(macosx):
   proc getCocoaWindow *(window :Window) :clong {.cdecl, importc: "glfwGetCocoaWindow".}
   when defined(wgpu):
-    proc getMetalLayer *(window :glfw.Window) :pointer {.importc: "macGetMetalLayer", header: "metal_glue.h", nodecl.}
+    proc getMetalLayer *(window :Window) :pointer {.cdecl, importc: "macGetMetalLayer", header: "metal_glue.h".}
 #___________________
 elif defined(linux) and defined(wayland):
   proc getWaylandDisplay *() :clong {.cdecl, importc: "glfwGetWaylandDisplay".}
