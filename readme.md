@@ -35,6 +35,7 @@ import nglfw/core as glfw
 - [ ] Support for raw mouse input.
 - [ ] Fix crashing on `-d:danger`.
 - [ ] Test dynamic linking with the current setup
+- [ ] Finish porting todo.h
 
 
 ## PatchNotes:

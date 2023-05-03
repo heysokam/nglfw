@@ -9,12 +9,6 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #include <GLFW/glfw3native.h>
 
-//______________________________________
-// For getting the CAMetalLayer
-//____________________________
-#include <Foundation/Foundation.h>
-#include <QuartzCore/CAMetalLayer.h>
-
 //______________________________________.
 // Our glue function.
 //____________________________.

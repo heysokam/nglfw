@@ -53,8 +53,8 @@ else:
         passC:   &"-I{glfwDir}",               # Include glfw header folder so our metal_glue file can access it
         passC:   &"-I{nglfwDir}",              # Include nglfw/ for the metal_glue.h file
         # Compile the metal glue file
-        compile: ("nglfw/metal_glue.m", "-framework Metal -framework CoreVideo -framework QuartzCore"),
-        passL:   "metal_glue.m.o",  # Manually link to the metal_glue.o file
+        passL:   "-framework Metal -framework CoreVideo -framework QuartzCore",
+        compile: "nglfw/metal_glue.m",
       .}
   elif defined(linux):
     {.passL: "-pthread -lGL -lX11 -lXrandr -lXxf86vm -lXi -lXcursor -lm -lXinerama".}
