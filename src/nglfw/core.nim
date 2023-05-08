@@ -410,7 +410,7 @@ proc setWindowTitle*(window: Window, title: cstring) {.cdecl, importc: "glfwSetW
 proc setWindowUserPointer*(window: Window, pointer: pointer) {.cdecl, importc: "glfwSetWindowUserPointer".}
 proc showWindow*(window: Window) {.cdecl, importc: "glfwShowWindow".}
 proc swapBuffers*(window: Window) {.cdecl, importc: "glfwSwapBuffers".}
-proc windowShouldClose*(window: Window): cint {.cdecl, importc: "glfwWindowShouldClose".}
+proc windowShouldClose*(window: Window): bool {.cdecl, importc: "glfwWindowShouldClose".}
 proc windowHint*(target: cint, hint: cint) {.cdecl, importc: "glfwWindowHint".}
 
 # Vulkan functions
@@ -447,7 +447,9 @@ else:
 #________________________________________
 # Extra functions from treeform/staticglfw
 #___________________
-# proc setImePos *(window :Window; xpos :cint; ypos :cint) {.cdecl, importc: "glfwSetImePos".}
-# proc getIme    *(window :Window; location :ptr[cint]; string :cstring) {.cdecl, importc: "glfwGetIme".}
-# proc closeIme  *(window :Window) {.cdecl, importc: "glfwCloseIme".}
+##[  DISABLED
+proc setImePos *(window :Window; xpos :cint; ypos :cint) :void {.cdecl, importc: "glfwSetImePos".}
+proc getIme    *(window :Window; location :ptr[cint]; string :cstring) :void {.cdecl, importc: "glfwGetIme".}
+proc closeIme  *(window :Window) :void {.cdecl, importc: "glfwCloseIme".}
+]##
 
