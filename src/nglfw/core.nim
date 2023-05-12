@@ -425,7 +425,7 @@ when defined(vulkan):
 # Native functions
 #___________________
 when defined(windows):
-  proc getWin32Window *(window :Window) :cint {.cdecl, importc: "glfwGetWin32Window".}
+  proc getWin32Window *(window :Window) :pointer {.cdecl, importc: "glfwGetWin32Window".}
 #___________________
 elif defined(macosx):
   proc getCocoaWindow *(window :Window) :clong {.cdecl, importc: "glfwGetCocoaWindow".}
@@ -433,11 +433,11 @@ elif defined(macosx):
     proc getMetalLayer *(window :Window) :pointer {.cdecl, importc: "macGetMetalLayer", header: "metal_glue.h".}
 #___________________
 elif defined(linux) and defined(wayland):
-  proc getWaylandDisplay *() :clong {.cdecl, importc: "glfwGetWaylandDisplay".}
-  proc getWaylandWindow *(window :Window) :clong {.cdecl, importc: "glfwGetWaylandWindow".}
+  proc getWaylandDisplay *() :pointer {.cdecl, importc: "glfwGetWaylandDisplay".}
+  proc getWaylandWindow *(window :Window) :pointer {.cdecl, importc: "glfwGetWaylandWindow".}
 #___________________
 elif defined(linux) and not defined(wayland):
-  proc getX11Display*() :clong {.cdecl, importc: "glfwGetX11Display".}
+  proc getX11Display*() :pointer {.cdecl, importc: "glfwGetX11Display".}
   proc getX11Window*(window :Window) :clong {.cdecl, importc: "glfwGetX11Window".}
 #___________________
 else:
