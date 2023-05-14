@@ -41,6 +41,7 @@ import nglfw/core as glfw
 ## PatchNotes:
 ```md
 # Version: 3.3.8.1
+- chg: setWindowShouldClose now takes a bool, instead of a cint
 - chg: windowShouldClose() now returns bool instead of cint
 - new: Added `getMetalLayer` function, for getting a CAMetalLayer pointer on mac (used for `wgpu`)
 - new: Added a pair of `metal_glue.c` and `metal_glue.h` files for Metal related extensions.

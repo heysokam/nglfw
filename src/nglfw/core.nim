@@ -402,7 +402,7 @@ proc setWindowMonitor*(window: Window, monitor: Monitor, xpos, ypos, width, heig
 proc setWindowPos*(window: Window, xpos: cint, ypos: cint) {.cdecl, importc: "glfwSetWindowPos".}
 proc setWindowPosCallback*(window: Window, cbfun: WindowPosFun): WindowPosFun {.cdecl, importc: "glfwSetWindowPosCallback".}
 proc setWindowRefreshCallback*(window: Window, cbfun: Windowrefreshfun): Windowrefreshfun {.cdecl, importc: "glfwSetWindowRefreshCallback".}
-proc setWindowShouldClose*(window: Window, value: cint) {.cdecl, importc: "glfwSetWindowShouldClose".}
+proc setWindowShouldClose*(window: Window, value: bool) {.cdecl, importc: "glfwSetWindowShouldClose".}
 proc setWindowSize*(window: Window, width: cint, height: cint) {.cdecl, importc: "glfwSetWindowSize".}
 proc setWindowSizeCallback*(window: Window, cbfun: WindowSizeFun): WindowSizeFun {.cdecl, importc: "glfwSetWindowSizeCallback".}
 proc setWindowSizeLimits*(window: Window, minwidth, minheight, maxwidth, maxheight: cint) {.cdecl, importc: "glfwSetWindowSizeLimits".}
