@@ -1,6 +1,7 @@
+![nglfw](./res/gh_banner.png)
 # Static GLFW for Nim
 Statically linked GLFW. Its functionality gets included into your binary.  
-Removes the need to distribute your own copy of `glfw.dll` / `libglfw3.dylib`.
+Removes the need to distribute your own copy of `glfw.dll` / `libglfw3.dylib`.  
 
 ## How to
 ```nim
@@ -9,23 +10,23 @@ init()       # init glfw, if no other init function name clashes with it
 glfw.init()  # or qualify it to avoid name clashes
 # ... etcetera. See examples
 ```
-Alternatively, you can force access imports from the library to be qualified mandatory.
+Alternatively, you can force access imports from the library to be qualified mandatory.  
 ```nim
 # Import all symbols, but they -must- be prefixed to be accessed.
 from nglfw as glfw import nil
 glfw.init()  # OK
 init()       # : Our nglfw init() proc will not be found
 ```
-This avoids conflicts with types, such as when you also have an `import vulkan` in your project.
+This avoids conflicts with types, such as when you also have an `import vulkan` in your project.  
 
 ## Examples
-See [examples/helloclear](./examples/helloclear_OpenGL.nim) for a simple clear-window example using OpenGL
-See [examples/helloNoAPI](./examples/hellowindow_NoAPI.nim) for a simple window creation example without using an API
+See [examples/helloclear](./examples/helloclear_OpenGL.nim) for a simple clear-window example using OpenGL  
+See [examples/helloNoAPI](./examples/hellowindow_NoAPI.nim) for a simple window creation example without using an API  
 
 
 ## Optional: Dynamic Linking
-Optional: dynamic linking support  (currently untested)
-Do not include `nglfw/compile.nim`, by doing:
+Optional: dynamic linking support  (currently untested)  
+Do not include `nglfw/compile.nim`, by doing:  
 ```nim
 import nglfw/core as glfw
 ```
