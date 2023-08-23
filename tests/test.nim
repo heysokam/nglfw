@@ -1,26 +1,24 @@
 # Opens a window and quickly exists.
-
-import nglfw
+from nglfw as glfw import nil
 
 # Init GLFW
-if init() == 0:
-  raise newException(Exception, "Failed to Initialize GLFW")
+if not glfw.init(): raise newException(Exception, "Failed to Initialize GLFW")
 
 # Open window.
-var window = createWindow(800, 600, "GLFW3 WINDOW", nil, nil)
+var window = glfw.createWindow(800, 600, "GLFW3 WINDOW", nil, nil)
 # Connect the GL context.
-window.makeContextCurrent()
+glfw.makeContextCurrent(window)
 
 # Swap buffers (this will display the red color)
-window.swapBuffers()
+glfw.swapBuffers(window)
 
 # Check for events.
-pollEvents()
+glfw.pollEvents()
 # If you get ESC key quit.
-if window.getKey(KEY_ESCAPE) == 1:
-  window.setWindowShouldClose(1)
+if glfw.getKey(window, glfw.KeyEscape) == 1:
+  glfw.setWindowShouldClose(window, true)
 
 # Destroy the window.
-window.destroyWindow()
+glfw.destroyWindow(window)
 # Exit GLFW.
-terminate()
+glfw.terminate()
