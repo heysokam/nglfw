@@ -4,7 +4,7 @@
 
 # Package Info
 packageName = "nglfw"
-version     = "3.3.8.1"  # First three are kept in sync with glfw version
+version     = "3.3.8.2"  # First three are kept in sync with glfw version
 author      = "Ivan Mar (sOkam!)"
 description = "Nim GLFW3"
 license     = "MIT"
@@ -15,5 +15,13 @@ binDir = "bin"
 
 # Build requirements
 requires "nim >= 1.0.2"
-requires "opengl >= 1.2.3"
+
+#_________________________________________________
+# Tasks: Internal
+#___________________
+task push, "Internal:  Pushes the git repository, and orders to create a new git tag for the package, using the latest version.":
+  ## Does nothing when local and remote versions are the same.
+  requires "https://github.com/beef331/graffiti.git"
+  exec "git push"  # Requires local auth
+  exec "graffiti ./{packageName}.nimble"
 

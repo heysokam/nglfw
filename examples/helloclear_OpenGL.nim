@@ -18,7 +18,7 @@ window.makeContextCurrent()
 loadExtensions()
 
 # Run while window is open.
-while windowShouldClose(window) == 0:
+while not windowShouldClose(window):
 
   # Draw red color screen.
   glClearColor(1, 0, 0, 1)
@@ -31,7 +31,7 @@ while windowShouldClose(window) == 0:
   pollEvents()
   # If you get ESC key quit.
   if window.getKey(KEY_ESCAPE) == 1:
-    window.setWindowShouldClose(1)
+    window.setWindowShouldClose(true)
 
 # Destroy the window.
 window.destroyWindow()

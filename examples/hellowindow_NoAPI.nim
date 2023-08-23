@@ -13,7 +13,7 @@ from nglfw as glfw import nil
 proc key (win :glfw.Window; key, code, action, mods :cint) :void {.cdecl.}=
   ## GLFW Keyboard Input Callback
   if (key == glfw.KEY_ESCAPE and action == glfw.PRESS):
-    glfw.setWindowShouldClose(win, true.cint)
+    glfw.setWindowShouldClose(win, true)
   if action == glfw.PRESS: echo "Pressed key | id:",$key, " code:",$code
 #__________________
 proc close  (win :glfw.Window) :bool=  glfw.windowShouldClose(win).bool
