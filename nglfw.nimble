@@ -19,6 +19,7 @@ requires "nim >= 1.0.2"
 #_________________________________________________
 # Tasks: Internal
 #___________________
+import std/strformat
 task push, "Internal:  Pushes the git repository, and orders to create a new git tag for the package, using the latest version.":
   ## Does nothing when local and remote versions are the same.
   requires "https://github.com/beef331/graffiti.git"
