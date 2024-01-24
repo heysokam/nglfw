@@ -32,6 +32,9 @@ This avoids conflicts with types, such as when you also have an `import vulkan` 
 See [examples/helloclear](./examples/helloclear_OpenGL.nim) for a simple clear-window example using OpenGL  
 See [examples/helloNoAPI](./examples/hellowindow_NoAPI.nim) for a simple window creation example without using an API  
 
+## Dependencies
+Nim and [whatever dependencies](https://www.glfw.org/docs/latest/compile_guide.html) GLFW requires to be statically compiled on your system.  
+In short, just nim and xorg development packages.  
 
 ## Optional: Dynamic Linking
 Optional: dynamic linking support  (currently untested)  
