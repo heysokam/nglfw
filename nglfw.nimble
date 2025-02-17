@@ -4,7 +4,7 @@
 
 # Package Info
 packageName = "nglfw"
-version     = "3.3.8.2"  # First three are kept in sync with glfw version
+version     = "3.3.8.3"  # First three are kept in sync with glfw version
 author      = "Ivan Mar (sOkam!)"
 description = "Nim GLFW3"
 license     = "MIT"

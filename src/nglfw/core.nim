@@ -414,8 +414,9 @@ proc windowShouldClose*(window: Window): bool {.cdecl, importc: "glfwWindowShoul
 proc windowHint*(target: cint, hint: cint) {.cdecl, importc: "glfwWindowHint".}
 
 # Vulkan functions
-when defined(vulkan):
-  import vulkan
+when defined(vulkan) or defined(VulkanNim):
+  when defined(vulkan)    : import vulkan
+  elif defined(VulkanNim) : import VulkanNim
   proc vulkanSupported*() :bool {.cdecl, importc: "glfwVulkanSupported".}
   proc getInstanceProcAddress*(instance: VkInstance, procname: cstring): VKProc {.cdecl, importc: "glfwGetInstanceProcAddress".}
   proc getPhysicalDevicePresentationSupport*(instance: VkInstance, device: VkPhysicalDevice, queuefamily: uint32): cint {.cdecl, importc: "glfwGetPhysicalDevicePresentationSupport".}
