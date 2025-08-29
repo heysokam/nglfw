@@ -1,6 +1,8 @@
 > **Warning**:  
-> _This library is in **Low Maintainance** mode._  
-> _See the [relevant section](#low-maintainance-mode) for an explanation of what that means._  
+> _This repository is **Permanently Archived** and won't receive any updates._  
+>
+> _At the time of archiving, the library was well maintained and worked correctly._  
+> _Please fork away and maintain your own fixes/changes._  
 
 ![nglfw](./res/gh_banner.png)
 # Static GLFW for Nim
@@ -80,14 +82,4 @@ https://github.com/glfw/glfw/commit/bf1c62b2612dba79365e836830fe2a6105adbe78
 
 ## Fork Info
 Fork of `treeform/staticglfw`, the original is no longer maintained.
-
-
-## Low Maintainance mode
-This library is in low maintainance mode.  
-
-New GLFW updates are unlikely to be implemented, unless:
-- They are randomnly needed for some casual side project _(eg: a gamejam or similar)_  
-- They are submitted through a PR  
-
-Proposals and PRs are very welcomed, and are very likely to be accepted right away.  
 
